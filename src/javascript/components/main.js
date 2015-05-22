@@ -97,13 +97,16 @@ module.exports = React.createClass({
 	}
 });
 
-fin.desktop.main(()=>{
-	new fin.desktop.Window({
-		name: 'mock',
-		url: 'mock.html',
-		autoShow: true
-	});
-});
+if (!fin.desktop.mock) {
+	fin.desktop.main(()=>{
+		new fin.desktop.Window({
+			name: 'mock',
+			url: 'mock.html',
+			autoShow: true
+		});
+	});	
+}
+
 
 /*
 <div className="ls-window">
