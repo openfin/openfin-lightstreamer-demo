@@ -58,6 +58,7 @@
     "gulp-util": "^3.0.4",
     "handlebars": "^3.0.0",
     "hbsfy": "~2.2.1",
+    "immutable": "^3.7.3",
     "karma": "^0.12.31",
     "karma-browserify": "^4.0.0",
     "karma-chrome-launcher": "^0.1.7",
@@ -81,6 +82,8 @@
     "xhr-browserify": "0.0.4"
   },
   "dependencies": {
+    "babel": "^5.4.7",
+    "babel-runtime": "^5.4.7",
     "backbone": "~1.1.2",
     "jquery": "~2.1.0"
   }
