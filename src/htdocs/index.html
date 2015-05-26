@@ -88,9 +88,11 @@
                 var y = config.y;
 
                 if (x === 0) {
-                    // config.bgColor = '#FAFF38';
-                    // config.fgColor = '#000000';
                     config.value = moment(parseInt(config.value)).format('hh:mm:ss');
+                }
+
+                if (y === 0) {
+                    config.bgColor = 'blue';
                 }
 
                 renderer.config = config;
@@ -254,12 +256,12 @@
             return y;
         };
 
-        var bgColor = '#000000';
-        var fixedAreasBGColor = '#262626';
+        var bgColor = '#030a28';
+        var fixedAreasBGColor = '#030a28';
 
         var font = "12px Roboto Condensed";
         var headingFont = "14px Roboto Condensed";
-        var headingFGColor = '#717871';
+        var headingFGColor = 'white';
 
         var lnfOverrides = {
             font: font,
@@ -271,12 +273,12 @@
             topLeftBackgroundColor: fixedAreasBGColor,
             fixedColumnBackgroundColor: fixedAreasBGColor,
             fixedRowBackgroundColor: fixedAreasBGColor,
-            color: 'red',
+            color: 'white',
             topLeftColor: headingFGColor,
-            fixedColumnColor: 'white',
+            fixedColumnColor: 'grey',
             fixedRowColor: headingFGColor,
-            lineColor: '#131C23',
-            gridLinesV: false,
+            lineColor: 'white',
+            gridLinesV: true,
             gridLinesH: true,
 
             fixedColumnFGSelColor: 'white',
@@ -287,7 +289,7 @@
             defaultFixedRowHeight: 20
         };
         this.jsonModel.defaultRowHeight = 27,
-
+        this.jsonModel.setFixedRowCount(-1);
         //to apply to a specific table
         jsonGrid.addGlobalProperties(lnfOverrides);
         jsonGrid.editAt = function(){};
@@ -297,11 +299,9 @@
             var x = config.x;
             var y = config.y;
 
-            if (x === 0) {
-                // config.bgColor = '#FAFF38';
-                // config.fgColor = '#000000';
+            if (y === 0) {
+                config.bgColor = '#3B58F4';
             }
-
             renderer.config = config;
             return renderer;
         };
