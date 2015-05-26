@@ -22,6 +22,18 @@
     <script src="out.js"></script>
     <script>
 
+    function tillGrid (cb){
+      if (document.querySelector('#stock-grid-top')){
+        cb();
+      }
+      else {
+        setTimeout(function(){
+          tillGrid(cb);
+        },10);
+        
+      }
+    }
+
     //setup random data for the JSON tab example
     (function(){
 
@@ -30,7 +42,7 @@
 
         document.addEventListener('polymer-ready', function() {
           console.log('hey yo');
-          setTimeout(function(){
+          tillGrid(function(){
             console.log('hey yo000');
             var stockGridTop = document.querySelector("#stock-grid-top");
             var stockModelTop = stockGridTop.getBehavior();
@@ -162,7 +174,7 @@
             });
 
 
-          },3000);
+          });
 
 
 

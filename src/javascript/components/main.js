@@ -33,8 +33,8 @@ module.exports = React.createClass({
 		});
 	},
 	toggleExpand: function (){
-		state.set('expanded', !state.get('expanded'));
-        
+		state = state.set('expanded', !state.get('expanded'));
+
 		fin.desktop.main(()=>{
 			fin.desktop.Window.getCurrent()
 				.animate({
@@ -94,15 +94,15 @@ module.exports = React.createClass({
 	}
 });
 
-// if (!fin.desktop.mock) {
-// 	fin.desktop.main(()=>{
-// 		new fin.desktop.Window({
-// 			name: 'mock',
-// 			url: 'mock.html',
-// 			autoShow: true
-// 		});
-// 	});	
-// }
+if (!fin.desktop.mock) {
+	fin.desktop.main(()=>{
+		new fin.desktop.Window({
+			name: 'mock',
+			url: 'mock.html',
+			autoShow: true
+		});
+	});	
+}
 
 
 /*
