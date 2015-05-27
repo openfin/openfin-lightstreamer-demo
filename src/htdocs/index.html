@@ -16,7 +16,17 @@
   </head>
 
   <body>
-    
+    <script>window.updateStream = {
+        symbol: 'XJI',
+        name: 'Xavier JavaScript Industries',
+        lastPrice: 41.55,
+        lastVolume: '2,500',
+        detailRef: 41.10,
+        detailDepthBuy: 450,
+        detailDepthSell: 299,
+        time: '9:27:16',
+        expanded: true
+    }</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/1.5.3/numeral.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
     <script src="out.js"></script>
@@ -164,6 +174,7 @@
                            stockModelBottom.data[0][name] = value;
 
                            stockModelBottom.changed();
+                           window.updateStream.what = 'ever_'+Math.random();
                        });
                    }
                 });
@@ -322,6 +333,15 @@
               var isBuy = itemUpdate.Ay.indexOf('BUY') > -1;
               var map =  isBuy ? this.buyMap : this.sellMap;
               var list = isBuy ? this.buyList : this.sellList;
+              
+              if (isBuy) {
+                window.updateStream.detailDepthBuy = this.buyList.length;
+              }
+              else {
+                window.updateStream.detailDepthSell = this.sellList.length;
+              }
+              
+
               switch(command) {
                   case "UPDATE":
                     if (map[key]) {
@@ -369,7 +389,6 @@
             this.jsonModel.changed();
           }
       };
-
 
     </script>
   </body>

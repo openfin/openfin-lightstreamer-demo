@@ -2,20 +2,23 @@ var React = require('react'),
 		fin = require('./fin.js'),
 		Grid = require('./grid.js'),
         Immutable = require('immutable'),
-        classSet = require('classnames');
+        classSet = require('classnames'),
+        updateStream = require('./update-stream.js'),
+        _ = require('underscore');
 
 
 var expandedHeight = 560,
-    state = Immutable.Map({
+    state = {
         symbol: 'XJI',
         name: 'Xavier JavaScript Industries',
         lastPrice: 41.55,
         lastVolume: '2,500',
         detailRef: 41.10,
-        detailDepth: '450 | 299',
+        detailDepthBuy: 450,
+        detailDepthSell: 299,
         time: '9:27:16',
         expanded: true
-    });
+    };
 
 module.exports = React.createClass({
 	closeWindow: ()=>{
@@ -34,32 +37,35 @@ module.exports = React.createClass({
 		});
 	},
 	toggleExpand: function (){
-		state = state.set('expanded', !state.get('expanded'));
+		state.expanded = !state.expanded;// = state.set('expanded', !state.expanded);
 
 		fin.desktop.main(()=>{
 			fin.desktop.Window.getCurrent()
 				.animate({
 					size: {
-						height: state.get('expanded') ? 560 : 300,
+						height: state.expanded ? 560 : 300,
 						duration: 1000
 					}
 				},{},()=>{
-                    this.setState(state);
+                    this.setState(Immutable.Map(state));
                 });
 		});
 	},
   getInitialState: function () {
   	return state;
   },
-  componentDidMount: function(){
-    console.log('set');
+  componentDidMount: function() {
+      var that = this;
+      Object.observe(window.updateStream, _.throttle(() => {
+          that.setState(window.updateStream);
+      }, 100));
   },
 	render: function(){
         var cx = classSet,
             iconClasses = classSet({
                 'fa': true,
-                'fa-plus-square': this.state.get('expanded'),
-                'fa-minus-square': !this.state.get('expanded')
+                'fa-plus-square': this.state.expanded,
+                'fa-minus-square': !this.state.expanded
             });
 
 		return	<div className="ls-window">
@@ -69,30 +75,30 @@ module.exports = React.createClass({
             </div>
             <div className="id-bar">
                 <div className="ticker">
-                    <div className="symbol">{this.state.get('symbol')}</div>
+                    <div className="symbol">{this.state.symbol}</div>
                     <div className="status">
                     	<div className="status-indicator"></div>
                     </div>
                 </div>
-                <div className="name">{this.state.get('name')}</div>
+                <div className="name">{this.state.name}</div>
             </div>
             <div className="dashboard">
                 <div className="last">
                     <div className="price">
-                        {this.state.get('lastPrice')}
+                        {this.state.lastPrice}
                     </div>
                     <div className="volume">
-                        {this.state.get('lastVolume')}
+                        {this.state.lastVolume}
                     </div>
                 </div>
                 <div className="time">
-                	<span>{this.state.get('time')}</span>
+                	<span>{this.state.time}</span>
                 </div>
                 <div className="detail">
                     <div className="label">REF</div>
-                    <div className="val">{this.state.get('detailRef')}</div>
+                    <div className="val">{this.state.detailRef}</div>
                     <div className="label">DEPTH</div>
-                    <div className="val">{this.state.get('detailDepth')}</div>
+                    <div className="val">{this.state.detailDepthBuy} | {this.state.detailDepthSell}</div>
                     <div className="expander">
                     	<i onClick={this.toggleExpand} className={iconClasses}></i>
                     </div>
