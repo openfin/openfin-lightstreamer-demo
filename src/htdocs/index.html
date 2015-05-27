@@ -74,7 +74,6 @@
 
             var stockGridBottom = document.querySelector("#stock-grid-bottom");
             var stockModelBottom = stockGridBottom.getBehavior();
-            bottomProvider = stockModelBottom.getCellProvider();
 
             stockModelBottom.defaultRowHeight = 27,
             stockModelBottom.setColumns([
@@ -90,26 +89,6 @@
                 last_price: "",
                 last_qty: ""
             }]);
-
-
-            bottomProvider.getCell = function(config) {
-                var renderer = bottomProvider.cellCache.simpleCellRenderer;
-                var x = config.x;
-                var y = config.y;
-
-                if (x === 0) {
-                    config.value = moment(parseInt(config.value)).format('hh:mm:ss');
-                }
-
-                if (y === 0) {
-                    config.bgColor = 'blue';
-                }
-
-                renderer.config = config;
-                return renderer;
-            };
-
-
 
             var buySell = new MarketDepthGrid('#buy-sell-grid');
             BS = buySell;
@@ -300,23 +279,26 @@
             defaultFixedRowHeight: 20
         };
         this.jsonModel.defaultRowHeight = 27,
-        this.jsonModel.setFixedRowCount(-1);
+        this.jsonModel.setFixedRowCount(0);
         //to apply to a specific table
         jsonGrid.addGlobalProperties(lnfOverrides);
         jsonGrid.editAt = function(){};
 
         cellProvider.getCell = function(config) {
-            var renderer = bottomProvider.cellCache.simpleCellRenderer;
+            var renderer = cellProvider.cellCache.simpleCellRenderer;
             var x = config.x;
             var y = config.y;
 
             if (y === 0) {
                 config.bgColor = '#3B58F4';
+                config.font = '16px Roboto Condensed';
             }
             renderer.config = config;
             return renderer;
         };
 
+        cellProvider.getFixedColumnCell = cellProvider.getCell;
+      
       };
 
       MarketDepthGrid.prototype = {
