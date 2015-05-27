@@ -17,15 +17,16 @@
 
   <body>
     <script>window.updateStream = {
-        symbol: 'XJI',
-        name: 'Xavier JavaScript Industries',
-        lastPrice: 41.55,
-        lastVolume: '2,500',
-        detailRef: 41.10,
-        detailDepthBuy: 450,
-        detailDepthSell: 299,
-        time: '9:27:16',
-        expanded: true
+        symbol: 'SF_TECH',
+        name: 'SF_TECH',
+        last_price: '',
+        last_qty: '',
+        detailRef: '',
+        detailDepthBuy: '',
+        detailDepthSell: '',
+        last: '',
+        expanded: true,
+        reference_price: ''
     }</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/1.5.3/numeral.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
@@ -146,6 +147,7 @@
                 stockSubscription.setRequestedSnapshot("yes");
                 stockSubscription.addListener({
                    onItemUpdate: function(itemUpdate) {
+                      var dateToFormat;
                        itemUpdate.forEachChangedField(function(name,pos,value) {
                            stockModelTop.data[0][name] = value;
                            stockModelTop.changed();
@@ -153,7 +155,18 @@
                            stockModelBottom.data[0][name] = value;
 
                            stockModelBottom.changed();
-                           window.updateStream.what = 'ever_'+Math.random();
+                           window.updateStream[name] = value;
+                           if (name === 'last'){
+                            dateToFormat = new Date(Number(value));
+                            window.updateStream[name] = dateToFormat.getHours() + 
+                              ':' +
+                              dateToFormat.getMinutes() +
+                              ':' + 
+                              ( "0" +dateToFormat.getSeconds()).slice(-2);
+                              //( "0" +dateToFormat.getSeconds()).slice(-2);
+                           }
+                           //time
+                           //window.updateStream.
                        });
                    }
                 });
