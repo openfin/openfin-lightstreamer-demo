@@ -1,6 +1,9 @@
 $background-color: #030a28
 $title-text-color: rgb(23, 114, 239)
+
 $dashboard-font-size: .77rem
+$on-green: rgb(127,255,7)
+$off-red: rgb(251,7,7)
 
 html, body
 	height: 100%
@@ -16,6 +19,7 @@ html, body
 	padding: 0 10px
 	height: 100%
 	-webkit-app-region: no-drag
+	
 	.window-control
 		display: flex
 		justify-content: flex-end
@@ -34,7 +38,7 @@ html, body
 		.ticker
 			display:flex
 			.symbol
-				flex: 1
+				flex: 1.1
 				font-size: 2rem
 				font-weight: bold
 			.status
@@ -44,6 +48,7 @@ html, body
 		.name
 			flex: 2
 			font-size: $dashboard-font-size
+			padding-left: 10px
 	.dashboard
 		display: flex
 		flex: 5
@@ -89,7 +94,7 @@ html, body
   display: inline-block;
   height: 15px;
   width: 15px;
-  background-color: green
+  background-color: $on-green
   border-radius: 30px;
 
 

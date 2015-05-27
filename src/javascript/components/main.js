@@ -1,7 +1,7 @@
 var React = require('react'),
 		fin = require('./fin.js'),
 		Grid = require('./grid.js'),
-        Immutable = require('immutable'),
+        //Immutable = require('immutable'),
         classSet = require('classnames'),
         updateStream = require('./update-stream.js'),
         _ = require('underscore');
@@ -74,7 +74,7 @@ module.exports = React.createClass({
             <div className="dashboard">
                 <div className="last">
                     <div className="price">
-                        {this.state.last_price}
+                        {Number(this.state.last_price || 0).toFixed(2)}
                     </div>
                     <div className="volume">
                         {Number(this.state.last_qty || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}

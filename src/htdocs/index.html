@@ -260,6 +260,7 @@
 
         var bgColor = '#030a28';
         var fixedAreasBGColor = '#030a28';
+        var topBarColor = 'rgb(23, 114, 239)';
 
         var font = "12px Roboto Condensed";
         var headingFont = "14px Roboto Condensed";
@@ -272,9 +273,9 @@
             fixedColumnFont: font,
             backgroundColor2: bgColor,
             backgroundColor: bgColor,
-            topLeftBackgroundColor: fixedAreasBGColor,
+            topLeftBackgroundColor: topBarColor,
             fixedColumnBackgroundColor: fixedAreasBGColor,
-            fixedRowBackgroundColor: fixedAreasBGColor,
+            fixedRowBackgroundColor: topBarColor,
             color: 'white',
             topLeftColor: headingFGColor,
             fixedColumnColor: 'grey',
@@ -302,8 +303,13 @@
             var y = config.y;
 
             if (y === 0) {
-                config.bgColor = '#3B58F4';
+                config.bgColor = '#1772EF';
+                //config.bgColor = 'red';
                 config.font = '16px Roboto Condensed';
+
+                if (x === 1 || x === 2) {
+                  config.font = '19px Roboto Condensed';
+                }
             }
             renderer.config = config;
             return renderer;
