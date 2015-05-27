@@ -57,5 +57,5 @@ module.exports = {
     dest: dest
   },
   js : src + '/javascript/',
-  vendorAssets: [src + '/css/**/']
+  vendorAssets: [src + '/css/**/', './app.json']
 };

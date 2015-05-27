@@ -1,7 +1,8 @@
 var React = require('react'),
 		fin = require('./fin.js'),
 		Grid = require('./grid.js'),
-        Immutable = require('immutable');
+        Immutable = require('immutable'),
+        classSet = require('classnames');
 
 
 var expandedHeight = 560,
@@ -42,14 +43,25 @@ module.exports = React.createClass({
 						height: state.get('expanded') ? 560 : 300,
 						duration: 1000
 					}
-				});
+				},{},()=>{
+                    this.setState(state);
+                });
 		});
 	},
   getInitialState: function () {
   	return state;
   },
-  componentDidMount: function(){},
+  componentDidMount: function(){
+    console.log('set');
+  },
 	render: function(){
+        var cx = classSet,
+            iconClasses = classSet({
+                'fa': true,
+                'fa-plus-square': this.state.get('expanded'),
+                'fa-minus-square': !this.state.get('expanded')
+            });
+
 		return	<div className="ls-window">
             <div className="window-control">
                 <i onClick={this.minApp} className="fa fa-minus"></i>
@@ -82,7 +94,7 @@ module.exports = React.createClass({
                     <div className="label">DEPTH</div>
                     <div className="val">{this.state.get('detailDepth')}</div>
                     <div className="expander">
-                    	<i onClick={this.toggleExpand} className="fa fa-pinterest"></i>
+                    	<i onClick={this.toggleExpand} className={iconClasses}></i>
                     </div>
                 </div>
 

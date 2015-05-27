@@ -85,6 +85,11 @@
     "babel": "^5.4.7",
     "babel-runtime": "^5.4.7",
     "backbone": "~1.1.2",
+    "classnames": "^2.1.1",
     "jquery": "~2.1.0"
+  },
+  "scripts": {
+    "upload"  : "aws s3 cp build/ s3://cdn.openfin.co/lightstreamer/ --recursive",
+    "up-json"  : "aws s3 cp build/app.json s3://cdn.openfin.co/lightstreamer/app.json"
   }
 }

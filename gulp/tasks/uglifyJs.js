@@ -6,8 +6,12 @@ var uglify = require('gulp-uglify');
 gulp.task('uglifyJs', ['browserify'], function() {
   return gulp.src(config.jsSrc)
     .pipe(uglify())
+    .on('error', function(err){
+    	console.log(err);
+    })
     .pipe(gulp.dest(config.dest))
-    .pipe(size());
+    .pipe(size())
+    ;
 });
 
 gulp.task('postbuild', ['browserify'], function() {

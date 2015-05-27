@@ -1,3 +1,5 @@
+require('babel/polyfill');
+
 var React = require('react'),
 		fin = require('./fin.js');
 
@@ -19,22 +21,22 @@ module.exports = React.createClass({
 	}
 });
 
-function* idMaker(){
-  var index = 0;
-  while(true)
-    yield index++;
-}
+// function* idMaker(){
+//   var index = 0;
+//   while(true)
+//     yield index++;
+// }
 
-var gen = idMaker();
-console.log(gen.next());
-console.log(gen.next());
-console.log(gen.next());
-console.log(gen.next());
-console.log(gen.next());
-console.log(gen.next());
-console.log(gen.next());
-console.log(gen.next());
-console.log(gen.next());
+// var gen = idMaker();
+// console.log(gen.next());
+// console.log(gen.next());
+// console.log(gen.next());
+// console.log(gen.next());
+// console.log(gen.next());
+// console.log(gen.next());
+// console.log(gen.next());
+// console.log(gen.next());
+// console.log(gen.next());
 
 
 // var fibonacci = {
