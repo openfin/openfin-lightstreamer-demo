@@ -32,12 +32,10 @@ module.exports = React.createClass({
 			fin.desktop.Window.getCurrent()
 				.animate({
 					size: {
-						height: window.updateStream.expanded ? 560 : 300,
+						height: window.updateStream.expanded ? 560 : 240,
 						duration: 1000
 					}
-				},{},()=>{
-                    //this.setState(Immutable.Map(state));
-                });
+				},{},()=>{});
 		});
 	},
   getInitialState: function () {
@@ -58,47 +56,51 @@ module.exports = React.createClass({
             });
 
 		return	<div className="ls-window">
-            <div className="window-control">
-                <i onClick={this.minApp} className="fa fa-minus"></i>
-                <i onClick={this.closeApp} className="fa fa-times"></i>
+    <div className="non-shrinking">
+        <div className="window-control">
+            <i onClick={this.minApp} className="fa fa-minus"></i>
+            <i onClick={this.closeApp} className="fa fa-times"></i>
+        </div>
+        <div className="id-bar">
+            <div className="ticker">
+                <div className="symbol">{this.state.symbol}</div>
+                <div className="status">
+                    <div className="status-indicator"></div>
+                </div>
             </div>
-            <div className="id-bar">
-                <div className="ticker">
-                    <div className="symbol">{this.state.symbol}</div>
-                    <div className="status">
-                    	<div className="status-indicator"></div>
-                    </div>
+            <div className="name">{this.state.name}</div>
+        </div>
+        <div className="dashboard">
+            <div className="last">
+                <div className="price">
+                    {Number(this.state.last_price || 0).toFixed(2)}
                 </div>
-                <div className="name">{this.state.name}</div>
+                <div className="volume">
+                    {Number(this.state.last_qty || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </div>
+                <div className="expander">
+                    <i onClick={this.toggleExpand} className={iconClasses}></i>
+                </div>
+                
             </div>
-            <div className="dashboard">
-                <div className="last">
-                    <div className="price">
-                        {Number(this.state.last_price || 0).toFixed(2)}
-                    </div>
-                    <div className="volume">
-                        {Number(this.state.last_qty || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                    </div>
-                </div>
-                <div className="time">
-                	<span>{this.state.last}</span>
-                </div>
-                <div className="detail">
-                    <div className="label">REF</div>
-                    <div className="val">{this.state.reference_price}</div>
-                    <div className="label">DEPTH</div>
-                    <div className="val">{this.state.detailDepthBuy} | {this.state.detailDepthSell}</div>
-                    <div className="expander">
-                    	<i onClick={this.toggleExpand} className={iconClasses}></i>
-                    </div>
-                </div>
-
+            <div className="time">
+                <span>{this.state.last}</span>
             </div>
-            <div className="grid">
-            	<Grid />
+            <div className="detail">
+                <div className="label">REF</div>
+                <div className="val">{this.state.reference_price}</div>
+                <div className="label">DEPTH</div>
+                <div className="val">{this.state.detailDepthBuy} | {this.state.detailDepthSell}</div>
+                <div className="expander">
+                    
+                </div>
             </div>
         </div>
+    </div>
+        
+    <div className="grid">
+        <Grid />
+    </div>
+</div>
 	}
 });
-
-

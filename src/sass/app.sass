@@ -20,71 +20,93 @@ html, body
 	height: 100%
 	-webkit-app-region: no-drag
 	
-	.window-control
-		display: flex
-		justify-content: flex-end
-		flex: 1
-		-webkit-app-region: drag
-		i
-			font-size: 1.2rem
-			font-weight: lighter
-			padding-left: 5px
-			-webkit-app-region: no-drag
-	.id-bar
-		display: flex
+	.non-shrinking
+		display:flex
 		flex-direction: column
-		flex: 2.2
-		color: $title-text-color
-		.ticker
-			display:flex
-			.symbol
-				flex: 1.1
-				font-size: 2rem
-				font-weight: bold
-			.status
-				flex: 1
-				display: flex
-				align-items: center
-		.name
-			flex: 2
-			font-size: $dashboard-font-size
-			padding-left: 10px
-	.dashboard
-		display: flex
-		flex: 5
-		.last
+		flex: 8.2
+		padding-bottom: 5px
+		min-height: 200px
+		.window-control
+			display: flex
+			justify-content: flex-end
+			flex: 1
+			-webkit-app-region: drag
+			i
+				font-size: 1.2rem
+				font-weight: lighter
+				padding-left: 5px
+				-webkit-app-region: no-drag
+		.id-bar
 			display: flex
 			flex-direction: column
-			flex:4
-			.price
-				padding-top: 10px
-				font-size: 2.2rem
-				text-align: right
-			.volume
-				text-align: right
-		.time
+			flex: 2.2
+			color: $title-text-color
+			-webkit-app-region: drag
+			.ticker
+				display:flex
+				.symbol
+					flex: 1.1
+					font-size: 2rem
+					font-weight: bold
+				.status
+					flex: 1
+					display: flex
+					align-items: center
+			.name
+				flex: 2
+				font-size: $dashboard-font-size
+				padding-left: 10px
+		.dashboard
 			display: flex
-			flex: 3
-			justify-content: center
-			padding-top: 35px
-		.detail
-			display: flex
-			flex-direction: column
-			flex: 3
-			text-align: right
-			font-size: $dashboard-font-size
-			.label
-				flex: 1
-				color: $title-text-color
-			.val
-				flex: 1
-			.expander
-				flex: 1.3
+			flex: 5
+			.last
 				display: flex
-				align-items: center
-				justify-content: flex-end
-				i
-					font-size: 1.2rem
+				flex-direction: column
+				flex:4
+				.price
+					display: flex
+					flex: 2
+					justify-content: flex-end
+					align-items: flex-end
+					font-size: 2.2rem
+					text-align: right
+				.volume
+					display: flex
+					flex: 1
+					justify-content: flex-end
+					align-items: flex-start
+					text-align: right
+				.expander
+					display: flex
+					flex: 1
+					justify-content: flex-start
+					align-items: flex-end
+					i
+						font-size: 1rem
+						opacity: .4
+			.time
+				display: flex
+				flex: 3
+				justify-content: center
+				padding-top: 35px
+			.detail
+				display: flex
+				flex-direction: column
+				flex: 3
+				text-align: right
+				font-size: $dashboard-font-size
+				.label
+					flex: 1
+					display: flex
+					justify-content: flex-end
+					align-items: flex-end
+					color: $title-text-color
+				.val
+					display: flex
+					justify-content: flex-end
+					align-items: flex-end
+					flex: 1
+				
 	.grid
 		display:flex
 		flex: 15
@@ -98,18 +120,19 @@ html, body
   border-radius: 30px;
 
 
-@media screen and (max-height: 500px)
-	.ls-window
-		.dashboard
-			.time
-				display: none
-			.detail
-				flex: 1
-				.label, .val
-					display: none
-		.id-bar
-			.name
-				display: none
+/* @media screen and (max-height: 500px) */
+/*	.ls-window */
+/*		.dashboard */
+/*			.time */
+/*				display: none */
+/*			.detail */
+/*				flex: 1 */
+/*				.label, .val */
+/*					display: none */
+/*		.id-bar */
+/*			.name */
+/*				display: none */
+
 
 #buy-sell-grid
 	height: 352px;
