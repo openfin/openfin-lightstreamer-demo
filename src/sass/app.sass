@@ -19,7 +19,8 @@ html, body
 	padding: 0 10px
 	height: 100%
 	-webkit-app-region: no-drag
-	
+	/* div */
+		/* outline: 1px solid silver */
 	.non-shrinking
 		display:flex
 		flex-direction: column
@@ -86,9 +87,18 @@ html, body
 						opacity: .4
 			.time
 				display: flex
+				flex-direction: column
+				justify-content: flex-start
 				flex: 3
-				justify-content: center
-				padding-top: 35px
+				.timeval
+					display: flex
+					flex-direction: column
+					justify-content: flex-end
+					align-items: center
+					flex: 2
+				.timebottom
+					flex: 2
+
 			.detail
 				display: flex
 				flex-direction: column

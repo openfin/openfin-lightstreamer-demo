@@ -84,7 +84,8 @@ module.exports = React.createClass({
                 
             </div>
             <div className="time">
-                <span>{this.state.last}</span>
+                <span className="timeval">{this.state.last}</span>
+                <div className="timebottom"></div>
             </div>
             <div className="detail">
                 <div className="label">REF</div>
