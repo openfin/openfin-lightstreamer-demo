@@ -58,7 +58,7 @@ module.exports = React.createClass({
 		return	<div className="ls-window">
     <div className="non-shrinking">
         <div className="window-control">
-            <i onClick={this.minApp} className="fa fa-minus"></i>
+            <i onClick={this.minApp} className="fa fa-minus min"></i>
             <i onClick={this.closeApp} className="fa fa-times"></i>
         </div>
         <div className="id-bar">
