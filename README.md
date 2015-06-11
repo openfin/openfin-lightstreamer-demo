@@ -1,4 +1,4 @@
-##LightStream Demo
+##LightStreamer Demo
 
 ##Running 
 clone, npm install, gulp 
