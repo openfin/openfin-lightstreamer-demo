@@ -25,17 +25,53 @@ module.exports = React.createClass({
 		  fin.desktop.Window.getCurrent().minimize();
 		});
 	},
+  maxApp: function() {
+
+    var that = this;
+
+      fin.desktop.main(() => {
+          fin.desktop.System.getMonitorInfo(function(info) {
+              var bottom = window.updateStream.maximized ? 560 : info.primaryMonitor.availableRect.bottom;
+              fin.desktop.Window.getCurrent()
+                  .animate({
+                      size: {
+                          height: bottom,
+                          duration: 1000
+                      },
+                      position: { 
+                          top: 0, 
+                          duration: 1000 
+                      }
+                  }, {}, () => {
+                    var max = window.updateStream.maximized,
+                        expanded = window.updateStream.expanded;
+
+                    window.updateStream.expanded = 560;
+                    window.updateStream.maximized = max ? 0 : bottom;
+                    that.setState(window.updateStream);
+                  });
+          });
+      });
+  },
 	toggleExpand: function (){
-		window.updateStream.expanded = !window.updateStream.expanded;// = state.set('expanded', !state.expanded);
+		var that = this;
+
+    window.updateStream.expanded = window.updateStream.expanded === 560  ? 240 : 560;
+    if (window.updateStream.maximized) {
+      window.updateStream.expanded = 560;
+      window.updateStream.maximized = 0;
+    }
 
 		fin.desktop.main(()=>{
 			fin.desktop.Window.getCurrent()
 				.animate({
 					size: {
-						height: window.updateStream.expanded ? 560 : 240,
+						height: window.updateStream.expanded,
 						duration: 1000
 					}
-				},{},()=>{});
+				},{},()=>{
+          that.setState(window.updateStream);
+        });
 		});
 	},
   getInitialState: function () {
@@ -45,27 +81,44 @@ module.exports = React.createClass({
       var that = this;
       Object.observe(window.updateStream, _.throttle(() => {
           that.setState(window.updateStream);
+
       }, 1000));
   },
 	render: function(){
-        var cx = classSet,
-            iconClasses = classSet({
+        var iconClasses = classSet({
                 'fa': true,
-                'fa-plus-square': !this.state.expanded,
-                'fa-minus-square': this.state.expanded
+                'fa-plus-square': this.state.expanded === 240,
+                'fa-minus-square': this.state.expanded === 560
+            }),
+            indicatorClasses = classSet({
+              'status-indicator' : true,
+              'day-end': this.state.trading_phase !== 'Trading'
+            }),
+            connectIcoClasses = classSet({
+              'connecting': this.state.status !== "CONNECTED:STREAM-SENSING" || this.state.trading_phase !== 'Trading',
+              'fa fa-spinner connect-ico': true
+            }),
+            gridClasses = classSet({
+              'connecting': this.state.status !== "CONNECTED:STREAM-SENSING" || this.state.trading_phase !== 'Trading'
+            }),
+            nonShrinkingClasses = classSet({
+              'non-shrinking': true,
+              'blank': this.state.trading_phase !== 'Trading'
             });
 
+
 		return	<div className="ls-window">
-    <div className="non-shrinking">
+    <div className={nonShrinkingClasses}>
         <div className="window-control">
             <i onClick={this.minApp} className="fa fa-minus min"></i>
+            <i onClick={this.maxApp} className="fa fa-square-o"></i>
             <i onClick={this.closeApp} className="fa fa-times"></i>
         </div>
         <div className="id-bar">
             <div className="ticker">
                 <div className="symbol">{this.state.symbol}</div>
                 <div className="status">
-                    <div className="status-indicator"></div>
+                    <div className={indicatorClasses}></div>
                 </div>
             </div>
             <div className="name">{this.state.name}</div>
@@ -92,15 +145,16 @@ module.exports = React.createClass({
                 <div className="val">{this.state.reference_price}</div>
                 <div className="label">DEPTH</div>
                 <div className="val">{this.state.detailDepthBuy} | {this.state.detailDepthSell}</div>
-                <div className="expander">
-                    
-                </div>
+                <div className="expander"></div>
             </div>
         </div>
     </div>
         
     <div className="grid">
-        <Grid />
+        <i className={connectIcoClasses}></i>
+        <div className={gridClasses}>
+          <Grid gridHeight={this.state.maximized} />
+        </div>      
     </div>
 </div>
 	}

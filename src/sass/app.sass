@@ -27,6 +27,7 @@ html, body
 		flex: 8.2
 		padding-bottom: 5px
 		min-height: 200px
+		max-height: 200px
 		.window-control
 			display: flex
 			justify-content: flex-end
@@ -37,8 +38,9 @@ html, body
 				font-weight: lighter
 				padding-left: 8px
 				-webkit-app-region: no-drag
+				padding-top: 3px
 			i.min
-				padding-top: 6px
+				padding-top: 8px
 		.id-bar
 			display: flex
 			flex-direction: column
@@ -131,7 +133,8 @@ html, body
   background-color: $on-green
   border-radius: 30px;
 
-
+.status-indicator.day-end
+	background-color: $off-red
 /* @media screen and (max-height: 500px) */
 /*	.ls-window */
 /*		.dashboard */
@@ -150,6 +153,37 @@ html, body
 	height: 352px;
 	width: 240px;
 
+
 .none
 	display: none
+
+div.connecting
+	display: none
+
+.connect-ico.connecting
+	display: block
+	font-size: 11rem
+	opacity: .3
+	width:178px
+	animation-timing-function: linear;
+	animation: infinite-spinning 2s infinite
+	position: absolute
+	top: 50%
+	left: 15%
+
+@keyframes infinite-spinning
+	from
+		transform: rotate(0deg)
+	to
+		transform: rotate(360deg)
+
+.connect-ico
+	display: none
+
+.non-shrinking.blank
+	.last,.time,.val
+		color: $background-color
+
+
+
 

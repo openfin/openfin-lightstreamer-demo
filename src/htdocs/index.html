@@ -25,8 +25,10 @@
         detailDepthBuy: '',
         detailDepthSell: '',
         last: '',
-        expanded: true,
-        reference_price: ''
+        expanded: 560,
+        reference_price: '',
+        trading_phase: '',
+        maximized: 0
     }</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/1.5.3/numeral.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
@@ -52,9 +54,9 @@
         //STOCK = "OS_C"; //slow item for testing purposes
 
         document.addEventListener('polymer-ready', function() {
-          console.log('hey yo');
+          
           tillGrid(function(){
-            console.log('hey yo000');
+          
             var stockGridTop = document.querySelector("#stock-grid-top");
             var stockModelTop = stockGridTop.getBehavior();
             stockModelTop.defaultRowHeight = 27,
@@ -117,13 +119,17 @@
                                 this.container.textContent = "connected";
                                 break;
                         }
+                        window.updateStream['status'] = newStatus;
                     }
                 });
                 client.connect();
 
+                console.log(STOCK+"_BUYSIDE", 'gotcha ');
+
                 var buySubscription = new Subscription("COMMAND",STOCK+"_BUYSIDE",["command", "key", "qty"]);
                 buySubscription.setRequestedSnapshot("yes");
                 buySubscription.addListener(buySell);
+
                 buySubscription.addListener({
                      onItemLostUpdates: function () {
                          // Unsubcribe and then subscribe again the Item in order that the snapshot restore the list.
@@ -175,15 +181,10 @@
                 client.subscribe(buySubscription);
                 client.subscribe(sellSubscription);
                 client.subscribe(stockSubscription);
-            });
+            }); // end require([...])
 
-
-          });
-
-
-
-        });
-
+          }); //end till grid
+        }); //end polymer ready
     })();
 
      function MarketDepthGrid(grid) {
@@ -262,8 +263,8 @@
         var fixedAreasBGColor = '#030a28';
         var topBarColor = 'rgb(23, 114, 239)';
 
-        var font = "12px Roboto Condensed";
-        var headingFont = "14px Roboto Condensed";
+        var font = "11px Roboto Condensed";
+        var headingFont = "13px Roboto Condensed";
         var headingFGColor = 'white';
 
         var lnfOverrides = {
@@ -305,10 +306,10 @@
             if (y === 0) {
                 config.bgColor = '#1772EF';
                 //config.bgColor = 'red';
-                config.font = '16px Roboto Condensed';
+                config.font = '15px Roboto Condensed';
 
                 if (x === 1 || x === 2) {
-                  config.font = '19px Roboto Condensed';
+                  config.font = '18px Roboto Condensed';
                 }
             }
             renderer.config = config;
@@ -327,13 +328,14 @@
           },
 
           onItemUpdate: function(itemUpdate) {
+
               var command = itemUpdate.getValue("command");
               var key = Number(itemUpdate.getValue("key")); //make it anumber to help the sort
               var qty = Number(itemUpdate.getValue("qty"));
-              var isBuy = itemUpdate.Ay.indexOf('BUY') > -1;
+              var isBuy = itemUpdate.By.indexOf('BUY') > -1;
               var map =  isBuy ? this.buyMap : this.sellMap;
               var list = isBuy ? this.buyList : this.sellList;
-              
+
               if (isBuy) {
                 window.updateStream.detailDepthBuy = this.buyList.length;
               }
@@ -341,6 +343,7 @@
                 window.updateStream.detailDepthSell = this.sellList.length;
               }
               
+
 
               switch(command) {
                   case "UPDATE":
@@ -372,6 +375,8 @@
                 if (!isBuy) {
                     list.reverse();
                 }
+
+                
 
                 this.jsonModel.changed();
           },
