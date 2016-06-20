@@ -9,10 +9,10 @@
         "autoShow": true,
         "defaultHeight": 560,
         "minHeight": 560,
-        "maxHeight":560,
+        "maxHeight": 560,
         "defaultWidth": 260,
-        "minWidth":260,
-        "maxWidth":260,
+        "minWidth": 260,
+        "maxWidth": 260,
         "resizable": true,
         "frame": false,
         "maximizable": false,
@@ -32,7 +32,7 @@
     "shortcut": {
         "company": "OpenFin",
         "description": "LightStreamer Demo",
-         "icon": "http://cdn.openfin.co/lightstreamer/images/favicon.ico",
+        "icon": "http://cdn.openfin.co/lightstreamer/images/favicon.ico",
         "name": "LightStreamer Demo"
     }
 }
