@@ -2,4 +2,5 @@
 Desktop.ini
 node_modules
 bower_components
-build
+#build - Needed for GitHub page
+*.bak
