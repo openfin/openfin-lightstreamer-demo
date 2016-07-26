@@ -4,14 +4,14 @@
         "name": "LightStreamerDemo",
         "description": "Light Stream Demo",
         "url": "http://openfin.github.io/openfin-lightstreamer-demo/build/",
-        "icon": "http://openfin.github.io/openfin-lightstreamer-demo/build/favicon.ico",
+        "icon": "http://openfin.github.io/openfin-lightstreamer-demo/build/images/favicon.ico",
         "uuid": "LightStreamerDemo",
         "autoShow": true,
         "defaultHeight": 560,
         "minHeight": 240,
         "defaultWidth": 260,
-        "minWidth":260,
-        "maxWidth":260,
+        "minWidth": 260,
+        "maxWidth": 260,
         "resizable": true,
         "frame": false,
         "maximizable": false,
@@ -26,12 +26,12 @@
     },
     "runtime": {
         "arguments": "",
-        "version": "stable"
+        "version": "beta"
     },
     "shortcut": {
         "company": "OpenFin",
         "description": "LightStreamer Demo",
-        "icon": "http://openfin.github.io/openfin-lightstreamer-demo/build/favicon.ico",
+        "icon": "http://openfin.github.io/openfin-lightstreamer-demo/build/images/favicon.ico",
         "name": "LightStreamer Demo"
     }
 }
