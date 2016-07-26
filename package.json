@@ -86,6 +86,7 @@
     "babel-runtime": "^5.4.7",
     "backbone": "~1.1.2",
     "classnames": "^2.1.1",
-    "jquery": "~2.1.0"
+    "jquery": "~2.1.0",
+    "fin-hypergrid": "~1.0.7"
   }
 }

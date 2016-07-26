@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://demos.lightstreamer.com/commons/noloadamd.js"></script>
+    <script src="http://demos.lightstreamer.com/commons/lightstreamer.js"></script>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Demo</title>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="font-awesome-4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="app.css" />
+
+    <link rel="import" href="fin-hypergrid.dev.html">
+
+  </head>
+
+  <body>
+    <script>window.updateStream = {
+        symbol: 'SF_TECH',
+        name: 'SuperFast Tech.',
+        last_price: '',
+        last_qty: '',
+        detailRef: '',
+        detailDepthBuy: '',
+        detailDepthSell: '',
+        last: '',
+        expanded: 560,
+        reference_price: '',
+        trading_phase: '',
+        maximized: 0
+    }</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/1.5.3/numeral.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+    <script src="out.js"></script>
+    <script>
+
+    function tillGrid (cb){
+      if (document.querySelector('#stock-grid-top')){
+        cb();
+      }
+      else {
+        setTimeout(function(){
+          tillGrid(cb);
+        },10);
+        
+      }
+    }
+
+    //setup random data for the JSON tab example
+    (function(){
+
+        var STOCK = "SF_TECH";
+        //STOCK = "OS_C"; //slow item for testing purposes
+
+        document.addEventListener('polymer-ready', function() {
+          
+          tillGrid(function(){
+          
+            var stockGridTop = document.querySelector("#stock-grid-top");
+            var stockModelTop = stockGridTop.getBehavior();
+            stockModelTop.defaultRowHeight = 27,
+            stockModelTop.setColumns([
+              { title: 'Stock Name', field: 'short_description' },
+              { title: 'Status', field: 'trading_phase' },
+              { title: 'Reference Price', field: 'reference_price' }
+            ]);
+            stockModelTop.setFixedRowCount(1);
+            stockModelTop.setData([{
+                short_description: "",
+                reference_price: "",
+                last: "",
+                last_price: "",
+                last_qty: ""
+            }]);
+
+
+            var stockGridBottom = document.querySelector("#stock-grid-bottom");
+            var stockModelBottom = stockGridBottom.getBehavior();
+
+            stockModelBottom.defaultRowHeight = 27,
+            stockModelBottom.setColumns([
+              { title: 'Last', field: 'last' },
+              { title: 'Last Price', field: 'last_price' },
+              { title: 'Last Quantity', field: 'last_qty' }
+            ]);
+            stockModelBottom.setFixedRowCount(1);
+            stockModelBottom.setData([{
+                short_description: "",
+                reference_price: "",
+                last: "",
+                last_price: "",
+                last_qty: ""
+            }]);
+
+            var buySell = new MarketDepthGrid('#buy-sell-grid');
+            BS = buySell;
+
+            require(["LightstreamerClient","Subscription"], function(LightstreamerClient,Subscription) {
+
+
+                var client = new LightstreamerClient("https://push.lightstreamer.com","MARKETDEPTH");
+                client.addListener({
+                    container: document.getElementById("ls-status"),
+                    onStatusChange: function(newStatus) {
+                        switch(newStatus) {
+                            case "CONNECTING":
+                            case "CONNECTED:STREAM-SENSE":
+                                this.container.textContent = "connecting";
+                                break;
+                            case "DISCONNECTED":
+                            case "DISCONNECTED:WILL-RETRY":
+                                this.container.textContent = "disconnected";
+                                break;
+                            case "CONNECTED:WS-STREAMING":
+                            case "CONNECTED:HTTP-STREAMING":
+                            case "CONNECTED:WS-POLLING":
+                            case "CONNECTED:HTTP-POLLING":
+                                this.container.textContent = "connected";
+                                break;
+                        }
+                        window.updateStream['status'] = newStatus;
+                    }
+                });
+                client.connect();
+
+                console.log(STOCK+"_BUYSIDE", 'gotcha ');
+
+                var buySubscription = new Subscription("COMMAND",STOCK+"_BUYSIDE",["command", "key", "qty"]);
+                buySubscription.setRequestedSnapshot("yes");
+                buySubscription.addListener(buySell);
+
+                buySubscription.addListener({
+                     onItemLostUpdates: function () {
+                         // Unsubcribe and then subscribe again the Item in order that the snapshot restore the list.
+                         client.unsubscribe(buySubscription);
+                         client.subscribe(buySubscription);
+                     }
+                 });
+
+                var sellSubscription = new Subscription("COMMAND",STOCK+"_SELLSIDE",["command", "key", "qty"]);
+                sellSubscription.setRequestedSnapshot("yes");
+                sellSubscription.addListener(buySell);
+                sellSubscription.addListener({
+                     onItemLostUpdates: function () {
+                         // Unsubcribe and then subscribe again the Item in order that the snapshot restore the list.
+                         client.unsubscribe(sellSubscription);
+                         client.subscribe(sellSubscription);
+                     }
+                 });
+
+                var stockSubscription = new Subscription("MERGE",STOCK,["short_description","reference_price","last","last_price","last_qty","trading_phase"])
+                stockSubscription.setRequestedSnapshot("yes");
+                stockSubscription.addListener({
+                   onItemUpdate: function(itemUpdate) {
+                      var dateToFormat;
+                       itemUpdate.forEachChangedField(function(name,pos,value) {
+                           stockModelTop.data[0][name] = value;
+                           stockModelTop.changed();
+
+                           stockModelBottom.data[0][name] = value;
+
+                           stockModelBottom.changed();
+                           window.updateStream[name] = value;
+                           if (name === 'last'){
+                            dateToFormat = new Date(Number(value));
+                            window.updateStream[name] =  ( "0" +dateToFormat.getHours()).slice(-2) + 
+                              ':' +
+                              ( "0" +dateToFormat.getMinutes()).slice(-2) +
+                              ':' + 
+                              ( "0" +dateToFormat.getSeconds()).slice(-2);
+                           }
+                           //time
+                           //window.updateStream.
+                       });
+                   }
+                });
+
+
+
+                client.subscribe(buySubscription);
+                client.subscribe(sellSubscription);
+                client.subscribe(stockSubscription);
+            }); // end require([...])
+
+          }); //end till grid
+        }); //end polymer ready
+    })();
+
+     function MarketDepthGrid(grid) {
+        var self = this;
+        this.buyMap = {};
+        this.sellMap = {};
+        this.buyList = [];
+        this.sellList = [];
+
+        //get ahold of our json grid example
+        var jsonGrid = document.querySelector(grid);
+
+        //get it's table model
+        this.jsonModel = jsonGrid.getBehavior();
+
+        //cell provider
+        var cellProvider = this.jsonModel.getCellProvider();
+
+        this.jsonModel.getRowCount = function() {
+            return Math.max(self.buyList.length, self.sellList.length);
+        }
+        this.jsonModel.getColumnCount = function() {
+            return 4;
+        };
+        this.jsonModel.getValue = function(x,y) {
+            var piece;
+            if (x === 0) {
+                piece = self.buyList[y];
+                if (piece) {
+                    return numeral(piece.qty).format('0,0');
+                } else {
+                    return '';
+                }
+            } else if (x === 1) {
+                piece = self.buyList[y];
+                if (piece) {
+                    return numeral(piece.key).format('0.00');
+                } else {
+                    return '';
+                }
+            } else if (x === 2) {
+                piece = self.sellList[y];
+                if (piece) {
+                    return numeral(piece.key).format('0.00');
+                } else {
+                    return '';
+                }
+            } else {
+                piece = self.sellList[y];
+                if (piece) {
+                    return numeral(piece.qty).format('0,0');
+                } else {
+                    return '';
+                }
+            }
+        };
+
+        var headers =
+            [
+                'Quantity',
+                'Buy',
+                'Sell',
+                'Quantity'
+            ];
+
+        this.jsonModel.setHeaders(headers);
+        this.jsonModel.getFixedColumnCount = function() {
+            return 1;
+        }
+
+        this.jsonModel.getFixedColumnValue = function(x,y) {
+            return y;
+        };
+
+        var bgColor = '#030a28';
+        var fixedAreasBGColor = '#030a28';
+        var topBarColor = 'rgb(23, 114, 239)';
+
+        var font = "11px Roboto Condensed";
+        var headingFont = "13px Roboto Condensed";
+        var headingFGColor = 'white';
+
+        var lnfOverrides = {
+            font: font,
+            topLeftFont: headingFont,
+            fixedRowFont: headingFont,
+            fixedColumnFont: font,
+            backgroundColor2: bgColor,
+            backgroundColor: bgColor,
+            topLeftBackgroundColor: topBarColor,
+            fixedColumnBackgroundColor: fixedAreasBGColor,
+            fixedRowBackgroundColor: topBarColor,
+            color: 'white',
+            topLeftColor: headingFGColor,
+            fixedColumnColor: 'grey',
+            fixedRowColor: headingFGColor,
+            lineColor: 'gray',
+            gridLinesV: false,
+            gridLinesH: true,
+
+            fixedColumnFGSelColor: 'white',
+            fixedColumnBGSelColor: '#3D77FE',
+            fixedRowFGSelColor: 'white',
+            fixedRowBGSelColor: '#3D77FE',
+
+            defaultFixedRowHeight: 20
+        };
+        this.jsonModel.defaultRowHeight = 27,
+        this.jsonModel.setFixedRowCount(0);
+        //to apply to a specific table
+        jsonGrid.addGlobalProperties(lnfOverrides);
+        jsonGrid.editAt = function(){};
+
+        cellProvider.getCell = function(config) {
+            var renderer = cellProvider.cellCache.simpleCellRenderer;
+            var x = config.x;
+            var y = config.y;
+
+            if (y === 0) {
+                config.bgColor = '#1772EF';
+                //config.bgColor = 'red';
+                config.font = '15px Roboto Condensed';
+
+                if (x === 1 || x === 2) {
+                  config.font = '18px Roboto Condensed';
+                }
+            }
+            renderer.config = config;
+            return renderer;
+        };
+
+        cellProvider.getFixedColumnCell = cellProvider.getCell;
+      
+      };
+
+      MarketDepthGrid.prototype = {
+
+          onEndOfSnapshot: function() {
+            // this.jsonModel.setState(this.sortedState);
+            // this.jsonModel.dataModified();
+          },
+
+          onItemUpdate: function(itemUpdate) {
+
+              var command = itemUpdate.getValue("command");
+              var key = Number(itemUpdate.getValue("key")); //make it anumber to help the sort
+              var qty = Number(itemUpdate.getValue("qty"));
+              var isBuy = itemUpdate.vx.indexOf('BUY') > -1;
+              var map =  isBuy ? this.buyMap : this.sellMap;
+              var list = isBuy ? this.buyList : this.sellList;
+
+              if (isBuy) {
+                window.updateStream.detailDepthBuy = this.buyList.length;
+              }
+              else {
+                window.updateStream.detailDepthSell = this.sellList.length;
+              }
+              
+
+
+              switch(command) {
+                  case "UPDATE":
+                    if (map[key]) {
+                      map[key].qty = qty;
+                      break;
+                    }
+                    //else should not happen, let's do the ADD anyway
+                  case "ADD":
+                    map[key] = {key: key, qty: qty};
+                    list.push(map[key]);
+                    break;
+
+                  case "DELETE":
+                    var index = list.indexOf(map[key]);
+                    if (index > -1) {
+                        list.splice(index,1);
+                    } //else ??
+                    delete(map[key]);
+                    break;
+              };
+
+                list.sort(function(a, b) {
+                    if (a.key < b.key) {
+                        return 1;
+                    }
+                    return -1;
+                });
+                if (!isBuy) {
+                    list.reverse();
+                }
+
+                
+
+                this.jsonModel.changed();
+          },
+
+          onSubscription: function() {
+            this.buyList.length = 0; //reset data
+            this.sellList.length = 0; //reset data
+            this.jsonModel.changed();
+            //this.jsonModel.setState(this.emptyState); //disable sorting while receiving the snapshot
+          },
+
+          onClearSnapshot: function(itemName,itemPos) {
+            this.buyList.length = 0; //reset data
+            this.sellList.length = 0; //reset data
+            this.jsonModel.changed();
+          }
+      };
+
+    </script>
+  </body>
+</html>

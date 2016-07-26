@@ -10,8 +10,8 @@
         "defaultHeight": 560,
         "minHeight": 240,
         "defaultWidth": 260,
-        "minWidth": 260,
-        "maxWidth": 260,
+        "minWidth":260,
+        "maxWidth":260,
         "resizable": true,
         "frame": false,
         "maximizable": false,
@@ -26,7 +26,7 @@
     },
     "runtime": {
         "arguments": "",
-        "version": "beta"
+        "version": "stable"
     },
     "shortcut": {
         "company": "OpenFin",
