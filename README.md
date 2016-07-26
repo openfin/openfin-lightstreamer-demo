@@ -4,7 +4,7 @@ The Lightstreamer Demo application is a simulated order book utilizing Lightstre
 For more informatuon about LightStreamer please click [here](https://www.lightstreamer.com/)
 
 ##Demo
-To launch the LightStreamer application running in OpenFin, please click [LightStreamer Demo](https://dl.openfin.co/services/download?fileName=lightstreamer-demo&config=http://openfin.github.io/openfin-lightstreamer-demo/build/app.json)
+To launch the LightStreamer application running in OpenFin, please click [LightStreamer Demo](https://dl.openfin.co/services/download?fileName=lightstreamer-demo&config=http://openfin.github.io/openfin-lightstreamer-demo/app.json)
 
 ##Running 
 To build the project locally
