@@ -3,4 +3,6 @@ Desktop.ini
 node_modules
 bower_components
 #build - Needed for GitHub page
+build/font-awesome-*/scss
+build/font-awesome-*/less
 *.bak
