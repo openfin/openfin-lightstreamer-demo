@@ -332,7 +332,7 @@
               var command = itemUpdate.getValue("command");
               var key = Number(itemUpdate.getValue("key")); //make it anumber to help the sort
               var qty = Number(itemUpdate.getValue("qty"));
-              var isBuy = (itemUpdate.vx || itemUpdate.Dx).indexOf('BUY') > -1;
+              var isBuy = (itemUpdate.getItemName()).indexOf('BUY') > -1;
               var map =  isBuy ? this.buyMap : this.sellMap;
               var list = isBuy ? this.buyList : this.sellList;
 
