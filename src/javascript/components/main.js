@@ -81,10 +81,6 @@ module.exports = React.createClass({
       var that = this;
       setInterval(() => that.setState(window.updateStream),1000);
 
-//       Object.observe(window.updateStream, _.throttle(() => {
-//           that.setState(window.updateStream);
-//       }, 1000));
-
   },
 	render: function(){
         var iconClasses = classSet({
